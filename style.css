@@ -71,6 +71,62 @@ p {
   animation: fadeIn 10s ease-in forwards;
 }
 
+.trigger-btn {
+  margin-top: 20px;
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.trigger-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.block-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.block-content {
+  text-align: center;
+}
+
+.block-text {
+  color: #999;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.retry-btn {
+  padding: 14px 40px;
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.retry-btn:hover {
+  opacity: 0.85;
+}
+
 @keyframes fadeIn {
   from { opacity: 0.2; }
   to { opacity: 1; }

