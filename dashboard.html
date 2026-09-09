@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Captures Dashboard</h1>
+    <p>Browse captures organized by device</p>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="pending">Pending</button>
+      <button class="filter-btn" data-filter="approved">Approved</button>
+      <button class="filter-btn" data-filter="rejected">Rejected</button>
+      <button class="filter-btn" data-filter="all">All</button>
+    </div>
+
+    <div id="devicesView">
+      <div id="folders" class="devices-grid"></div>
+    </div>
+
+    <div id="folderView" class="hidden">
+      <button id="backBtn" class="btn back-btn">← Back to Devices</button>
+      <h2 id="folderTitle" class="folder-title"></h2>
+      <div class="captures-grid"></div>
+    </div>
+
+    <p id="emptyMsg" class="empty hidden">No captures found.</p>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>
